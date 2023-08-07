@@ -1,6 +1,6 @@
-function Button({ text, emoji, type }) {
+function Button({ text, emoji, type, onClick }) {
   return (
-    <a src="#" className={`btn btn--${type}`}>
+    <a src="#" className={`btn btn--${type}`} onClick={onClick}>
       {emoji} {text}
     </a>
   );
