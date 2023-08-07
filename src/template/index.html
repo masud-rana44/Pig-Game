@@ -20,60 +20,105 @@
       .font-nunito {
         font-family: "Nunito", sans-serif;
       }
+
+      .player--active {
+        background-color: #ffffff66;
+      }
+
+      .player--active .name {
+        font-weight: 700;
+      }
+
+      .player--active .score {
+        font-weight: 400;
+      }
+
+      .player--active .current {
+        opacity: 1;
+      }
+
+      .player--winner {
+        background-color: #2f2f2f;
+      }
+
+      .player--winner .name {
+        font-weight: 700;
+        color: #c7365f;
+      }
+
+      .hidden {
+        display: none;
+      }
     </style>
   </head>
   <body
     class="font-nunito bg-gradient-to-br from-[#bf2e34] to-[#753682] h-screen flex items-center justify-center py-6 text-[#333]"
   >
     <main
-      class="relative w-full max-w-[1000px] mx-8 h-full rounded-lg overflow-hidden shadow-md flex"
+      class="relative w-full max-w-[1000px] mx-8 h-full rounded-lg overflow-hidden shadow-md flex bg-[#ffffff59]"
     >
       <section
-        class="bg-[#ffffff59] w-full h-full flex flex-col items-center py-20"
+        id="player--0"
+        class="player--active w-full h-full flex flex-col items-center py-20 transition-all duration-700"
       >
-        <h1 class="text-3xl mb-4 sm:mb-0 sm:text-4xl font-bold">PLAYER 1</h1>
-        <p class="text-6xl sm:text-[86px] text-[#c7365f]">20</p>
+        <h1 class="name text-3xl mb-4 sm:mb-0 sm:text-4xl font-bold">
+          PLAYER 1
+        </h1>
+        <p id="score--0" class="score text-6xl sm:text-[86px] text-[#c7365f]">
+          20
+        </p>
         <div
           class="bg-[#c7365f] flex flex-col items-center justify-center px-3 py-2 sm:px-6 sm:py-4 uppercase text-white mt-auto rounded-md"
         >
           <span class="text-lg sm:text-xl font-light mb-2">Current</span>
-          <p class="text-3xl sm:text-4xl font-medium">0</p>
+          <p id="current--0" class="text-3xl sm:text-4xl font-medium">0</p>
         </div>
       </section>
 
       <!-- player 2  -->
       <section
-        class="bg-[#ffffff3b] w-full h-full flex flex-col items-center py-20"
+        id="player--1"
+        class="w-full h-full flex flex-col items-center py-20 transition-all duration-700"
       >
-        <h1 class="text-3xl mb-4 sm:mb-0 sm:text-4xl font-bold">PLAYER 2</h1>
-        <p class="text-6xl sm:text-[86px] text-[#c7365f]">20</p>
+        <h1 class="name text-3xl mb-4 sm:mb-0 sm:text-4xl font-bold">
+          PLAYER 2
+        </h1>
+        <p id="score--1" class="score text-6xl sm:text-[86px] text-[#c7365f]">
+          10
+        </p>
         <div
           class="bg-[#c7365f] flex flex-col items-center justify-center px-3 py-2 sm:px-6 sm:py-4 uppercase text-white mt-auto rounded-md"
         >
           <span class="text-lg sm:text-xl font-light mb-2">Current</span>
-          <p class="text-3xl sm:text-4xl font-medium">0</p>
+          <p id="current--1" class="text-3xl sm:text-4xl font-medium">0</p>
         </div>
       </section>
       <img
+        id="dice"
         class="absolute w-20 left-1/2 top-[35%] -translate-x-1/2"
         src="./img/dice-6.png"
         alt="dice"
       />
       <a
+        id="btn--new"
         class="absolute text-base uppercase left-1/2 top-[5%] -translate-x-1/2 bg-white px-4 py-2 rounded-full transition-all duration-300 active:translate-y-[3px]"
         href="#"
         >🔁 New game</a
       >
       <a
+        id="btn--roll"
         class="absolute text-base uppercase left-1/2 top-[55%] -translate-x-1/2 bg-white px-4 py-2 rounded-full transition-all duration-300 active:translate-y-[3px]"
         href="#"
         >🎲 Roll dice</a
       >
       <a
+        id="btn--hold"
         class="absolute text-base uppercase left-1/2 top-[65%] -translate-x-1/2 bg-white px-4 py-2 rounded-full transition-all duration-300 active:translate-y-[3px]"
         href="#"
         >📥 Hold</a
       >
     </main>
+
+    <script src="./script.js"></script>
   </body>
 </html>
