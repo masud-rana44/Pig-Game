@@ -1,3 +1,4 @@
+import { memo } from "react";
 import CurrentScore from "./CurrentScore";
 
 function Player({ name, score, currentScore, isActive, isWinner }) {
@@ -14,4 +15,4 @@ function Player({ name, score, currentScore, isActive, isWinner }) {
   );
 }
 
-export default Player;
+export default memo(Player);

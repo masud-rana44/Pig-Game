@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useReducer } from "react";
 
 import Player from "./components/Player";
 import Button from "./components/Button";
@@ -18,43 +18,69 @@ const img = {
   6: diceImg_6,
 };
 
-function App() {
-  const [diceImg, setDiceImg] = useState(null);
-  const [playing, setPlaying] = useState(true);
-  const [activePlayer, setActivePlayer] = useState(0);
-  const [currentScore, setCurrentScore] = useState(0);
-  const [scores, setScores] = useState([0, 0]);
-  const [winner, setWinner] = useState(null);
+const initialState = {
+  diceImg: null,
+  playing: true,
+  winner: null,
+  activePlayer: 0,
+  scores: [0, 0],
+  currentScore: 0,
+};
 
-  function switchPlayer() {
-    setCurrentScore(0);
-    setActivePlayer((curActive) => (curActive === 0 ? 1 : 0));
+function reducer(state, action) {
+  switch (action.type) {
+    case "diceUpdate": {
+      return { ...state, diceImg: action.payload };
+    }
+    case "currentScoreUpdate":
+      return { ...state, currentScore: state.currentScore + action.payload };
+    case "playerSwitch":
+      return {
+        ...state,
+        currentScore: 0,
+        activePlayer: state.activePlayer === 0 ? 1 : 0,
+      };
+    case "totalScoreUpdate":
+      // eslint-disable-next-line no-case-declarations
+      const newScores = [...state.scores];
+      newScores[state.activePlayer] += state.currentScore;
+
+      return { ...state, scores: newScores };
   }
+}
+
+function App() {
+  const [
+    { diceImg, playing, winner, activePlayer, scores, currentScore },
+    dispatch,
+  ] = useReducer(reducer, initialState);
+
+  // const [diceImg, setDiceImg] = useState(null);
+  // const [playing, setPlaying] = useState(true);
+  // const [activePlayer, setActivePlayer] = useState(0);
+  // const [currentScore, setCurrentScore] = useState(0);
+  // const [scores, setScores] = useState([0, 0]);
+  // const [winner, setWinner] = useState(null);
 
   function handleRoll() {
     if (!playing) return;
 
     const dice = Math.floor(Math.random() * 6) + 1;
-    setDiceImg(img[dice]);
+    dispatch({ type: "diceUpdate", payload: img[dice] });
 
     if (dice !== 1) {
-      setCurrentScore((score) => score + dice);
+      dispatch({ type: "currentScoreUpdate", payload: dice });
     } else {
-      switchPlayer();
+      dispatch({ type: "playerSwitch" });
     }
   }
 
   function handleHold() {
     if (!playing) return;
 
-    setScores((scores) => {
-      const newScores = [...scores];
-      newScores[activePlayer] = scores[activePlayer] + currentScore;
-      return newScores;
-    });
+    dispatch({ type: "tot" });
 
-    // check if player win or not
-    if (scores[activePlayer] + currentScore >= 10) {
+    if (scores[activePlayer] + currentScore >= 100) {
       setPlaying(false);
       setWinner(activePlayer);
       setActivePlayer(null);

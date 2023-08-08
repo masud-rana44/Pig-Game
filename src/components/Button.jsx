@@ -1,6 +1,10 @@
-function Button({ text, emoji, type, onClick }) {
+function Button({ text, emoji, type, onClick, isComputerActive }) {
   return (
-    <a src="#" className={`btn btn--${type}`} onClick={onClick}>
+    <a
+      src="#"
+      className={`btn btn--${type} ${isComputerActive ? "hidden" : ""}`}
+      onClick={onClick}
+    >
       {emoji} {text}
     </a>
   );
