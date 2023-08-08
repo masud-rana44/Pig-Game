@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useReducer } from "react";
 
 import Player from "./components/Player";
 import Button from "./components/Button";
@@ -27,6 +27,8 @@ const initialState = {
   currentScore: 0,
 };
 
+const WIN_SCORE = 20;
+
 function reducer(state, action) {
   switch (action.type) {
     case "diceUpdate": {
@@ -46,6 +48,32 @@ function reducer(state, action) {
       newScores[state.activePlayer] += state.currentScore;
 
       return { ...state, scores: newScores };
+    case "checkedWinner":
+      return state.scores[state.activePlayer] >= WIN_SCORE
+        ? {
+            ...state,
+            playing: false,
+            winner: state.activePlayer,
+            currentScore: 0,
+            diceImg: null,
+            activePlayer: null,
+          }
+        : {
+            ...state,
+            currentScore: 0,
+            activePlayer: state.activePlayer === 0 ? 1 : 0,
+          };
+    case "restart":
+      return {
+        ...state,
+        playing: true,
+        winner: null,
+        currentScore: 0,
+        activePlayer: 0,
+        scores: [0, 0],
+      };
+    default:
+      throw new Error("Unknown action type");
   }
 }
 
@@ -54,13 +82,6 @@ function App() {
     { diceImg, playing, winner, activePlayer, scores, currentScore },
     dispatch,
   ] = useReducer(reducer, initialState);
-
-  // const [diceImg, setDiceImg] = useState(null);
-  // const [playing, setPlaying] = useState(true);
-  // const [activePlayer, setActivePlayer] = useState(0);
-  // const [currentScore, setCurrentScore] = useState(0);
-  // const [scores, setScores] = useState([0, 0]);
-  // const [winner, setWinner] = useState(null);
 
   function handleRoll() {
     if (!playing) return;
@@ -78,25 +99,8 @@ function App() {
   function handleHold() {
     if (!playing) return;
 
-    dispatch({ type: "tot" });
-
-    if (scores[activePlayer] + currentScore >= 100) {
-      setPlaying(false);
-      setWinner(activePlayer);
-      setActivePlayer(null);
-      setDiceImg(null);
-      setCurrentScore(0);
-    } else {
-      switchPlayer();
-    }
-  }
-
-  function handleNewGame() {
-    setActivePlayer(0);
-    setPlaying(true);
-    setWinner(null);
-    setCurrentScore(0);
-    setScores([0, 0]);
+    dispatch({ type: "totalScoreUpdate" });
+    dispatch({ type: "checkedWinner" });
   }
 
   return (
@@ -118,7 +122,12 @@ function App() {
         />
 
         <img className="dice" src={diceImg} />
-        <Button text="New game" emoji="🔄" type="new" onClick={handleNewGame} />
+        <Button
+          text="New game"
+          emoji="🔄"
+          type="new"
+          onClick={() => dispatch({ type: "restart" })}
+        />
         <Button text="Roll dice" emoji="🎲" type="roll" onClick={handleRoll} />
         <Button text="Hold" emoji="📥" type="hold" onClick={handleHold} />
       </main>
